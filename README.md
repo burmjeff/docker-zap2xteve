@@ -3,7 +3,7 @@
 ### Docker usage
 ```
 docker create \
-  --name=xteve \
+  --name=zap2xteve \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Europe/London \
@@ -30,7 +30,7 @@ docker create \
 | `-e ZAP2XML_PASSWORD=none` | Specify password for either Zap2it or TVGuide |
 | `-e XMLTV_FILENAME=xmltv.xml` | Specify filename for zap2xml EPG-XML file |
 | `-e ZAP2XML_ARGS= -D -I -F -L -T -O -b` | Specify additional arguements for zap2xml (http://zap2xml.awardspace.info) |
-| `-e XML_UPDATE_INTERVAL=12` | Specify update interval for zap2xml (in hours). |
+| `-e XML_UPDATE_INTERVAL=24` | Specify update interval for zap2xml (in hours). |
 | `-v /config` | Location of xTeVe config files |
 | `-v /data` | Location of zap2xml EPG-XML file |
 | `-v /cache` | Location of zap2xml cache |
