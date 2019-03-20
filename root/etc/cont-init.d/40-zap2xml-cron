@@ -5,6 +5,7 @@ if [ "$TVGUIDE_EPG" = "TRUE" ]; then
   ZAP2XML_ARGS="$ZAP2XML_ARGS -z"
 fi
 
-echo "[ZAP2XML] Updating EPG XML..."
-(crontab -l ; echo "0 */$XML_UPDATE_INTERVAL * * * perl /app/zap2xml.pl -u "$ZAP2XML_USERNAME" -p "$ZAP2XML_PASSWORD" -U -o "/data/$XMLTV_FILENAME" $ZAP2XML_ARGS >> /var/log/cron.log; echo "[ZAP2XML] XML EPG has been updated!"") | crontab -
-(perl /app/zap2xml.pl -u "$ZAP2XML_USERNAME" -p "$ZAP2XML_PASSWORD" -U -o "/data/$XMLTV_FILENAME" $ZAP2XML_ARGS >> /var/log/cron.log; echo "[ZAP2XML] XML EPG has been updated!") &
+zap2xml=""$(date) [ZAP2XML] XML EPG is being updated!"; perl /app/zap2xml.pl -u "$ZAP2XML_USERNAME" -p "$ZAP2XML_PASSWORD" -U -o "/data/$XMLTV_FILENAME" $ZAP2XML_ARGS >> /var/log/cron.log; echo "[ZAP2XML] XML EPG has been updated!""
+
+echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" > /etc/crontabs/abc
+($zap2xml) &
