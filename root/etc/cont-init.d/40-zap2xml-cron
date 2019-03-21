@@ -5,7 +5,38 @@ if [ "$TVGUIDE_EPG" = "TRUE" ]; then
   ZAP2XML_ARGS="$ZAP2XML_ARGS -z"
 fi
 
-zap2xml='echo $(date) [ZAP2XML] XML EPG is being updated\!; perl /app/zap2xml.pl -u "$ZAP2XML_USERNAME" -p "$ZAP2XML_PASSWORD" -U -o "/data/$XMLTV_FILENAME" $ZAP2XML_ARGS > /data/zap2xml_data.log && echo $(date) [ZAP2XML] XML EPG has been updated\! | tee -a /data/zap2xml.log'
+if [ -z "$ZAP2XML_USERNAME" ] || [ -z "$ZAP2XML_PASSWORD" ] ; then
+	if [ -z "$ZAP2XML_USERNAME_1" ] || [ -z "$ZAP2XML_PASSWORD_1" ] ; then
+		echo "[ZAP2XML] No zap2xml username/password specified, skipping using zap2xml"
+		exit 0
+	fi
+	zap_def=0
+else
+	zap2xml='echo $(date) [ZAP2XML] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${ZAP2XML_USERNAME}'" -p "'${ZAP2XML_PASSWORD}'" -U -o "/data/'$XMLTV_FILENAME'" -c "/cache/zap2xml" '$ZAP2XML_ARGS' > /data/zap2xml_data.log && echo $(date) [ZAP2XML] XML EPG has been updated\! | tee -a /data/zap2xml.log'
+	echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" >> /etc/crontabs/abc
+	eval ${zap2xml} &
+	zap_def=1
+fi
 
-echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" > /etc/crontabs/abc
-eval ${zap2xml} &
+zap_num=0
+zapExists=true
+until [ $_done ]; do
+	((zap_num++))
+	zap_user=ZAP2XML_USERNAME_$zap_num
+	zap_pass=ZAP2XML_PASSWORD_$zap_num
+	zap_args=ZAP2XML_ARGS$zap_num
+	if [ -n "${!zap_user}" ] && [ -n "${!zap_pass}" ] ; then
+		if  [ -n "${!zap_args}" ]; then
+			zap_args=${!zap_args}
+		else
+			zap_args=$ZAP2XML_ARGS
+		fi
+		zap2xml='echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$XMLTV_FILENAME'" -c "/cache/zap2xml_'$zap_num'" '$zap_args' > /data/zap2xml_data.log && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log'
+		echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" >> /etc/crontabs/abc
+		eval ${zap2xml} &
+	else
+		zap_num=$((zap_num + zap_def))
+		echo "[ZAP2XML] Found and added $zap_num unique zap2xml users."
+		_done=1
+	fi
+done

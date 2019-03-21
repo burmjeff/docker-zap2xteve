@@ -33,10 +33,10 @@ ADD zap2xml.pl /app/zap2xml.pl
 # environment variables
 ENV XTEVE_PORT=34400 \
 TVGUIDE_EPG=FALSE \
-ZAP2XML_USERNAME=none \
-ZAP2XML_PASSWORD=none \
-XMLTV_FILENAME=xmltv.xml \
+ZAP2XML_USERNAME= \
+ZAP2XML_PASSWORD= \
 ZAP2XML_ARGS="-D -I -F -L -T -O -b" \
+XMLTV_FILENAME=xmltv.xml \
 XML_UPDATE_INTERVAL=24
 
 # add local files
