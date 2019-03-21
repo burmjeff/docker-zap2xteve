@@ -36,7 +36,7 @@ until [ $_done ]; do
 		eval ${zap2xml} &
 		((zap_num++))
 	else
-		zap_num=$((zap_num + zap_def))
+		zap_num=$((zap_num + zap_def - 1))
 		echo "[ZAP2XML] Found and added $zap_num unique zap2xml users."
 		_done=1
 	fi
