@@ -24,14 +24,15 @@ until [ $_done ]; do
 	((zap_num++))
 	zap_user=ZAP2XML_USERNAME_$zap_num
 	zap_pass=ZAP2XML_PASSWORD_$zap_num
-	zap_args=ZAP2XML_ARGS$zap_num
+	zap_args=ZAP2XML_ARGS_$zap_num
+	zap_xml=$zap_num'_'$XMLTV_FILENAME
 	if [ -n "${!zap_user}" ] && [ -n "${!zap_pass}" ] ; then
 		if  [ -n "${!zap_args}" ]; then
 			zap_args=${!zap_args}
 		else
 			zap_args=$ZAP2XML_ARGS
 		fi
-		zap2xml='echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$XMLTV_FILENAME'" -c "/cache/zap2xml_'$zap_num'" '$zap_args' > /data/zap2xml_data.log && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log'
+		zap2xml='echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$zap_xml'" -c "/cache/zap2xml_'$zap_num'" '$zap_args' > /data/zap2xml_data.log && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log'
 		echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" >> /etc/crontabs/abc
 		eval ${zap2xml} &
 	else
