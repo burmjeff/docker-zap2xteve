@@ -18,10 +18,9 @@ else
 	zap_def=1
 fi
 
-zap_num=0
+zap_num=1
 zapExists=true
 until [ $_done ]; do
-	((zap_num++))
 	zap_user=ZAP2XML_USERNAME_$zap_num
 	zap_pass=ZAP2XML_PASSWORD_$zap_num
 	zap_args=ZAP2XML_ARGS_$zap_num
@@ -32,9 +31,10 @@ until [ $_done ]; do
 		else
 			zap_args=$ZAP2XML_ARGS
 		fi
-		zap2xml='echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$zap_xml'" -c "/cache/zap2xml_'$zap_num'" '$zap_args' > /data/zap2xml_data.log && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log'
+		zap2xml='echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /app/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$zap_xml'" -c "/cache/zap2xml_'$zap_num'" '$zap_args' > "/data/zap2xml_data_'$zap_num'.log" && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log'
 		echo "0	*/$XML_UPDATE_INTERVAL	*	*	*	$zap2xml" >> /etc/crontabs/abc
 		eval ${zap2xml} &
+		((zap_num++))
 	else
 		zap_num=$((zap_num + zap_def))
 		echo "[ZAP2XML] Found and added $zap_num unique zap2xml users."
