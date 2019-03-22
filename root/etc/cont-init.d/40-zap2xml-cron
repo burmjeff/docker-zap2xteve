@@ -3,7 +3,6 @@
 echo "#!/bin/bash
 while true; do" > /app/zap2xml
 chmod +x /app/zap2xml
-update_interval= $XML_UPDATE_INTERVAL * 3600
 
 if [ "$TVGUIDE_EPG" = "TRUE" ]; then
   echo "[ZAP2XML] Using TVGuide instead of Zap2it for EPG XML"
@@ -41,7 +40,7 @@ until [ $_done ]; do
 	else
 		zap_num=$((zap_num + zap_def - 1))
 		echo "[ZAP2XML] Found and added $zap_num unique zap2xml users."
-		echo "sleep $update_interval
+		echo "sleep ${XML_UPDATE_INTERVAL}h
 		done" >> /app/zap2xml
 		_done=1
 	fi
