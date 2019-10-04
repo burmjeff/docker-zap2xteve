@@ -14,6 +14,8 @@ RUN apk add --no-cache \
     vlc \
     curl
 
+RUN export PERL_MM_USE_DEFAULT=1 && \
+    cpan -i JSON
 RUN mkdir /data && \
     mkdir /cache
 
