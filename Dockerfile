@@ -1,33 +1,29 @@
 FROM lsiobase/alpine:latest
 LABEL maintainer="burmjeff"
 
-RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
-RUN echo "@edgetesting http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-
 RUN apk add --no-cache \
     ca-certificates \
-    curl perl@edge \
-    perl-html-parser@edge \
-    perl-http-cookies@edge \
-    perl-lwp-useragent-determined@edge \
-    perl-json@edge \
-    perl-json-xs@edgetesting \
-    perl-lwp-protocol-https@edge \
-    perl-uri@edge \
-    ca-certificates@edge \
-    perl-net-libidn@edge \
-    perl-net-ssleay@edge \
-    perl-io-socket-ssl@edge \
-    perl-libwww@edge \
-    perl-mozilla-ca@edge \
-    perl-net-http@edge && \
-    mkdir /data && \
-    mkdir /cache && \
-    curl -o \
-    /app/xteve -L \
-	"https://xteve.de:9443/download/?os=linux&arch=amd64&name=xteve&beta=false" && \
+    perl-dev \
+    build-base \
+    perl-html-parser \
+    perl-http-cookies \
+    perl-json \
+    perl-lwp-protocol-https \
+    perl-lwp-useragent-determined \
+    ffmpeg \
+    vlc \
+    curl
+
+RUN export PERL_MM_USE_DEFAULT=1 && \
+    cpan -i JSON
+RUN mkdir /data && \
+    mkdir /cache
+
+RUN wget https://github.com/xteve-project/xTeVe-Downloads/blob/master/xteve_linux_amd64.tar.gz?raw=true -O xteve_linux_amd64.tar.gz && \
+    tar zxfvp xteve_linux_amd64.tar.gz -C /app && \
+    rm -f xteve_linux_amd64.tar.gz && \
     chmod +x /app/xteve
-    
+
 ADD zap2xml.pl /app/zap2xml.pl
 
 # environment variables
