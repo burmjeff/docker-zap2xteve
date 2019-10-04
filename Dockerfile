@@ -2,6 +2,7 @@ FROM lsiobase/alpine:latest
 LABEL maintainer="burmjeff"
 
 RUN apk add --no-cache \
+    ca-certificates \
     perl-dev \
     build-base \
     perl-html-parser \
