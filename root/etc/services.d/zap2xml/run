@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
 
 exec \
-	s6-setuidgid abc /app/zap2xml
+	s6-setuidgid abc $ZAP2XML_HOME/zap2xml
 	

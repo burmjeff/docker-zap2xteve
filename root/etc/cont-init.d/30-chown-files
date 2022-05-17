@@ -2,7 +2,8 @@
 
 # permissions
 chown -R abc:abc \
-	/app \
-	/config \
+	$XTEVE_HOME \
+	$XTEVE_TEMP \
+	$ZAP2XML_HOME \
 	/data \
-	/cache
+	/config
