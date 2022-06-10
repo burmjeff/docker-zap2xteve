@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 echo "#!/bin/bash
-while true; do" > $ZAP2XML_HOME/zap2xml
+while true; do sleep 30; done" > $ZAP2XML_HOME/zap2xml
 chmod +x $ZAP2XML_HOME/zap2xml
 
 if [ "$TVGUIDE_EPG" = "TRUE" ]; then
