@@ -40,7 +40,8 @@ RUN export PERL_MM_USE_DEFAULT=1 && \
     cpan -i JSON
 
 # environment variables
-ENV XTEVE_BIN=/home/xteve/bin \
+ENV HOST_IP= \
+XTEVE_BIN=/home/xteve/bin \
 XTEVE_HOME=/home/xteve \
 XTEVE_TEMP=/tmp/xteve \
 XTEVE_PORT=34400 \

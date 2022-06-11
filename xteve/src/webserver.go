@@ -109,7 +109,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	var path = r.URL.Path
 	var debug string
 
-	setGlobalDomain(r.Host)
+	//setGlobalDomain(r.Host)
 
 	debug = fmt.Sprintf("Web Server Request:Path: %s", path)
 	showDebug(debug, 2)
@@ -262,7 +262,7 @@ func xTeVe(w http.ResponseWriter, r *http.Request) {
 	var path = strings.TrimPrefix(r.URL.Path, "/")
 	var groups = []string{}
 
-	setGlobalDomain(r.Host)
+	//setGlobalDomain(r.Host)
 
 	// XMLTV File
 	if strings.Contains(path, "xmltv/") {
@@ -386,7 +386,7 @@ func WS(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	setGlobalDomain(r.Host)
+	//setGlobalDomain(r.Host)
 
 	for {
 
@@ -675,7 +675,7 @@ func Web(w http.ResponseWriter, r *http.Request) {
 
 	var language LanguageUI
 
-	setGlobalDomain(r.Host)
+	//setGlobalDomain(r.Host)
 
 	if System.Dev == true {
 
@@ -905,7 +905,7 @@ func API(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	setGlobalDomain(r.Host)
+	//setGlobalDomain(r.Host)
 	var request APIRequestStruct
 	var response APIResponseStruct
 

@@ -21,6 +21,7 @@ docker create \
 | Parameter | Function |
 | :----: | --- |
 | `-p 34400` | The exposed port for the xTeVe webinterface |
+| `-e HOST_IP=` | Manually set an IP to use for xTeve Host IP |
 | `-e XTEVE_PORT=34400` | The port for the xTeVe webinterface |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |

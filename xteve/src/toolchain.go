@@ -366,6 +366,11 @@ func resolveHostIP() (err error) {
 		return
 	}
 
+	HOST_IP, present := os.LookupEnv("HOST_IP")
+	if present {
+		System.IPAddressesV4Host = append(System.IPAddressesV4Host, HOST_IP)
+	}
+
 	for _, netInterfaceAddress := range netInterfaceAddresses {
 
 		networkIP, ok := netInterfaceAddress.(*net.IPNet)
@@ -389,7 +394,6 @@ func resolveHostIP() (err error) {
 			}
 
 		}
-
 	}
 
 	// If IP previously set in settings (including the default, empty) is not available anymore
