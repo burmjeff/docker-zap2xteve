@@ -288,6 +288,7 @@ type SettingsStruct struct {
 	DefaultMissingEPG     string   `json:"defaultMissingEPG,required"`
 	DisallowURLDuplicates bool     `json:"disallowURLDuplicates"`
 	EnableMappedChannels  bool     `json:"enableMappedChannels"`
+	FillMissingChannels   bool     `json:"fillMissingChannels"`
 	EpgSource             string   `json:"epgSource"`
 	FFmpegOptions         string   `json:"ffmpeg.options"`
 	FFmpegPath            string   `json:"ffmpeg.path"`

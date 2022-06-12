@@ -120,6 +120,7 @@ func loadSettings() (settings SettingsStruct, err error) {
 	defaults["defaultMissingEPG"] = "-"
 	defaults["disallowURLDuplicates"] = false
 	defaults["enableMappedChannels"] = false
+	defaults["fillMissingChannels"] = false
 	defaults["epgSource"] = "PMS"
 	defaults["ffmpeg.options"] = System.FFmpeg.DefaultOptions
 	defaults["files.update"] = true

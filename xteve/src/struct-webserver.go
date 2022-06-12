@@ -33,6 +33,7 @@ type RequestStruct struct {
 		DefaultMissingEPG        *string   `json:"defaultMissingEPG,omitempty"`
 		DisallowURLDuplicates    *bool     `json:"disallowURLDuplicates,omitempty"`
 		EnableMappedChannels     *bool     `json:"enableMappedChannels,omitempty"`
+		FillMissingChannels      *bool     `json:"fillMissingChannels,omitempty"`
 		EpgSource                *string   `json:"epgSource,omitempty"`
 		FFmpegOptions            *string   `json:"ffmpeg.options,omitempty"`
 		FFmpegPath               *string   `json:"ffmpeg.path,omitempty"`

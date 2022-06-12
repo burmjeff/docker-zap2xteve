@@ -282,6 +282,17 @@ class SettingsCategory {
                 setting.appendChild(tdLeft);
                 setting.appendChild(tdRight);
                 break;
+            case "fillMissingChannels":
+                var tdLeft = document.createElement("TD");
+                tdLeft.innerHTML = "{{.settings.fillMissingChannels.title}}" + ":";
+                var tdRight = document.createElement("TD");
+                var input = content.createCheckbox(settingsKey);
+                input.checked = data;
+                input.setAttribute("onchange", "javascript: this.className = 'changed'");
+                tdRight.appendChild(input);
+                setting.appendChild(tdLeft);
+                setting.appendChild(tdRight);
+                break;
             // Select
             case "hostIP":
                 var tdLeft = document.createElement("TD");
@@ -479,6 +490,9 @@ class SettingsCategory {
                 break;
             case "enableMappedChannels":
                 text = "{{.settings.enableMappedChannels.description}}";
+                break;
+            case "fillMissingChannels":
+                text = "{{.settings.fillMissingChannels.description}}";
                 break;
             case "files.update":
                 text = "{{.settings.filesUpdate.description}}";

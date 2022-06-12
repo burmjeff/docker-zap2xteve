@@ -615,6 +615,14 @@ func mapping() (err error) {
 		// Check whether the assigned XMLTV Files and Channels still exist.
 		if xepgChannel.XActive == true {
 
+			if len(xepgChannel.XmltvFile) <= 1 || len(xepgChannel.XMapping) <= 1 {
+				// Set default for new Channel
+				if Settings.DefaultMissingEPG != "-" {
+					xepgChannel.XmltvFile = "xTeVe Dummy"
+					xepgChannel.XMapping = Settings.DefaultMissingEPG
+				}
+			}
+
 			var mapping = xepgChannel.XMapping
 			var file = xepgChannel.XmltvFile
 
@@ -768,9 +776,8 @@ func createXMLTVFile() (err error) {
 func getProgramData(xepgChannel XEPGChannelStruct) (xepgXML XMLTV, err error) {
 
 	var xmltvFile = System.Folder.Data + xepgChannel.XmltvFile
-	var channelID = xepgChannel.XMapping
-
 	var xmltv XMLTV
+	programs := []*Program{}
 
 	if xmltvFile == System.Folder.Data+"xTeVe Dummy" {
 		xmltv = createDummyProgram(xepgChannel)
@@ -780,9 +787,32 @@ func getProgramData(xepgChannel XEPGChannelStruct) (xepgXML XMLTV, err error) {
 		if err != nil {
 			return
 		}
-
 	}
 
+	programs, err = getPrograms(xepgChannel, xmltv)
+	if err != nil {
+		return
+	}
+
+	if Settings.FillMissingChannels && len(programs) <= 1 {
+		xepgChannel.XmltvFile = "xTeVe Dummy"
+		xepgChannel.XMapping = Settings.DefaultMissingEPG
+		xmltv = createDummyProgram(xepgChannel)
+		programs, err = getPrograms(xepgChannel, xmltv)
+		if err != nil {
+			return
+		}
+	}
+
+	for _, xmltvProgram := range programs {
+		xepgXML.Program = append(xepgXML.Program, xmltvProgram)
+	}
+
+	return
+}
+
+func getPrograms(xepgChannel XEPGChannelStruct, xmltv XMLTV) (programs []*Program, err error) {
+	var channelID = xepgChannel.XMapping
 	for _, xmltvProgram := range xmltv.Program {
 
 		if xmltvProgram.Channel == channelID {
@@ -851,7 +881,7 @@ func getProgramData(xepgChannel XEPGChannelStruct) (xepgXML XMLTV, err error) {
 			// Premiere
 			program.Premiere = xmltvProgram.Premiere
 
-			xepgXML.Program = append(xepgXML.Program, program)
+			programs = append(programs, program)
 
 		}
 
@@ -893,10 +923,10 @@ func createDummyProgram(xepgChannel XEPGChannelStruct) (dummyXMLTV XMLTV) {
 			epg.Channel = xepgChannel.XMapping
 			epg.Start = epgStartTime.Format("20060102150405") + offset
 			epg.Stop = epgStopTime.Format("20060102150405") + offset
-			epg.Title = append(epg.Title, &Title{Value: xepgChannel.XName + " (" + epgStartTime.Weekday().String()[0:2] + ". " + epgStartTime.Format("15:04") + " - " + epgStopTime.Format("15:04") + ")", Lang: "en"})
+			epg.Title = append(epg.Title, &Title{Value: xepgChannel.XName, Lang: "en"})
 
 			if len(xepgChannel.XDescription) == 0 {
-				epg.Desc = append(epg.Desc, &Desc{Value: "xTeVe: (" + strconv.Itoa(dummyLength) + " Minutes) " + epgStartTime.Weekday().String() + " " + epgStartTime.Format("15:04") + " - " + epgStopTime.Format("15:04"), Lang: "en"})
+				epg.Desc = append(epg.Desc, &Desc{Value: xepgChannel.XName + " (" + strconv.Itoa(dummyLength) + " Minutes)", Lang: "en"})
 			} else {
 				epg.Desc = append(epg.Desc, &Desc{Value: xepgChannel.XDescription, Lang: "en"})
 			}

@@ -408,6 +408,10 @@
       "title": "Enable mapped channels",
       "description": "Automatically enable channels with assigned EPG data"
     },
+    "fillMissingChannels": {
+      "title": "Fill channels that have 1 program or less in EPG",
+      "description": "Autofill Channels with xTeVe dummy EPG data when there is less than 2 programs"
+    },
     "disallowURLDuplicates":
     {
       "title": "Disallow URL duplicates",

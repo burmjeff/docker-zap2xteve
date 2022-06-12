@@ -112,6 +112,12 @@ func updateServerSettings(request RequestStruct) (settings SettingsStruct, err e
 					reloadData = true
 				}
 
+			case "fillMissingChannels":
+                                // If FillMissingChannels was turned on, rebuild DVR and XEPG database
+                                if newSettings["fillMissingChannels"] == true && oldSettings["fillMissingChannels"] == false {
+                                        reloadData = true
+                                }
+
 			}
 
 			oldSettings[key] = value
