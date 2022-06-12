@@ -10,9 +10,8 @@ docker create \
   -e ZAP2XML_USERNAME= \
   -e ZAP2XML_PASSWORD= \
   -p 34400:34400 \
-  -v <path to config>:/config \
-  -v <path to data>:/data \
-  -v <path to cache>:/cache \
+  -v <path to xteve config>:/config \
+  -v <path to zap2xml>:/zap2xml \
   --restart unless-stopped \
   burmjeff/zap2xteve
 ```
@@ -33,12 +32,11 @@ docker create \
 | `-e XMLTV_FILENAME=xmltv.xml` | Specify filename for zap2xml EPG-XML file |
 | `-e XML_UPDATE_INTERVAL=24` | Specify update interval for zap2xml (in hours). |
 | `-v /config` | Location of xTeVe config files |
-| `-v /data` | Location of zap2xml EPG-XML file |
-| `-v /cache` | Location of zap2xml cache |
+| `-v /zap2xml` | Location of zap2xml files |
 
 ## Using Multiple zap2xml users/guides
 ```
-Add as many zap2xml user details as wanted (users must be sequentially numbered). 
+Add as many zap2xml user details as wanted (users must be sequentially numbered).
 (OPTIONAL): Add separate zap2xml arguments for each user by following the numbering scheme.  Will use default (ZAP2XML_ARGS) if no numbered (ZAP2XML_ARGS_#) is provided.
 For example:
 ```
