@@ -1,8 +1,9 @@
 #!/usr/bin/with-contenv bash
 
-echo "#!/bin/bash
-while true; do sleep 30; done" > $ZAP2XML_HOME/zap2xml
-chmod +x $ZAP2XML_HOME/zap2xml
+cp -n /zap2xml.pl /zap2xml/zap2xml.pl
+
+echo -e "#!/bin/bash \n\nwhile true; do\n" > /zap2xml/zap2xml
+chmod +x /zap2xml/zap2xml
 
 if [ "$TVGUIDE_EPG" = "TRUE" ]; then
   echo "[ZAP2XML] Using TVGuide instead of Zap2it for EPG XML"
@@ -11,18 +12,19 @@ fi
 
 if [ -z "$ZAP2XML_USERNAME" ] || [ -z "$ZAP2XML_PASSWORD" ] ; then
 	if [ -z "$ZAP2XML_USERNAME_1" ] || [ -z "$ZAP2XML_PASSWORD_1" ] ; then
-		echo "[ZAP2XML] No zap2xml username/password specified, skipping using zap2xml"
+		msg="[ZAP2XML] No zap2xml username/password specified, skipping using zap2xml"
+		echo $msg
+		echo "sleep infinity; done" >> /zap2xml/zap2xml
 		exit 0
 	fi
 	zap_def=0
 else
-	zap2xml='(echo $(date) [ZAP2XML] XML EPG is being updated\!; perl ${ZAP2XML_HOME}/zap2xml.pl -u "'${ZAP2XML_USERNAME}'" -p "'${ZAP2XML_PASSWORD}'" -U -o "/data/'$XMLTV_FILENAME'" -c "${ZAP2XML_HOME}/cache/zap2xml" '$ZAP2XML_ARGS' > /data/zap2xml_data.log && echo $(date) [ZAP2XML] XML EPG has been updated\! | tee -a /data/zap2xml.log) &'
-	echo $zap2xml >> $ZAP2XML_HOME/zap2xml
+	zap2xml='(echo $(date) [ZAP2XML] XML EPG is being updated\!; perl /zap2xml/zap2xml.pl -u "'${ZAP2XML_USERNAME}'" -p "'${ZAP2XML_PASSWORD}'" -U -o "/data/'$XMLTV_FILENAME'" -c "/zap2xml/cache/zap2xml" '$ZAP2XML_ARGS' > /data/zap2xml_data.log && echo $(date) [ZAP2XML] XML EPG has been updated\! | tee -a /data/zap2xml.log) &'
+	echo $zap2xml >> /zap2xml/zap2xml
 	zap_def=1
 fi
 
 zap_num=1
-zapExists=true
 until [ $_done ]; do
 	zap_user=ZAP2XML_USERNAME_$zap_num
 	zap_pass=ZAP2XML_PASSWORD_$zap_num
@@ -34,14 +36,14 @@ until [ $_done ]; do
 		else
 			zap_args=$ZAP2XML_ARGS
 		fi
-		zap2xml='(echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl ${ZAP2XML_HOME}/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$zap_xml'" -c "${ZAP2XML_HOME}/cache/zap2xml_'$zap_num'" '$zap_args' > "/data/zap2xml_data_'$zap_num'.log" && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log) &'
-		echo $zap2xml >> $ZAP2XML_HOME/zap2xml
+		zap2xml='(echo $(date) [ZAP2XML_'$zap_num'] XML EPG is being updated\!; perl /zap2xml/zap2xml.pl -u "'${!zap_user}'" -p "'${!zap_pass}'" -U -o "/data/'$zap_xml'" -c "/zap2xml/cache/zap2xml_'$zap_num'" '$zap_args' > "/data/zap2xml_data_'$zap_num'.log" && echo $(date) [ZAP2XML_'$zap_num'] XML EPG has been updated\! | tee -a /data/zap2xml.log) &'
+		echo $zap2xml >> /zap2xml/zap2xml
 		((zap_num++))
 	else
 		zap_num=$((zap_num + zap_def - 1))
 		echo "[ZAP2XML] Found and added $zap_num unique zap2xml users."
 		echo "sleep ${XML_UPDATE_INTERVAL}h
-		done" >> $ZAP2XML_HOME/zap2xml
+		done" >> /zap2xml/zap2xml
 		_done=1
 	fi
 done

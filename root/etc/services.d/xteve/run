@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
 exec \
-	s6-setuidgid abc "${XTEVE_BIN}/xteve" \
+	s6-setuidgid abc "/xteve/bin/xteve" \
 	-config=/config \
 	-port="$XTEVE_PORT"

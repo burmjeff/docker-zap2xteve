@@ -41,11 +41,8 @@ RUN export PERL_MM_USE_DEFAULT=1 && \
 
 # environment variables
 ENV HOST_IP= \
-XTEVE_BIN=/home/xteve/bin \
-XTEVE_HOME=/home/xteve \
 XTEVE_TEMP=/tmp/xteve \
 XTEVE_PORT=34400 \
-ZAP2XML_HOME=/home/zap2xml \
 TVGUIDE_EPG=FALSE \
 ZAP2XML_USERNAME= \
 ZAP2XML_PASSWORD= \
@@ -53,38 +50,37 @@ ZAP2XML_ARGS="-D -I -F -L -T -O -b" \
 XMLTV_FILENAME=xmltv.xml \
 XML_UPDATE_INTERVAL=24
 
-RUN mkdir -p $XTEVE_BIN
-RUN mkdir -p $ZAP2XML_HOME
+RUN mkdir -p /xteve
+RUN mkdir -p /zap2xml
 
 # Add binary to PATH
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$XTEVE_BIN
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/xteve/bin
 
 # Set working directory
-WORKDIR $XTEVE_HOME
+WORKDIR /xteve
 
-ADD zap2xml.pl $ZAP2XML_HOME/zap2xml.pl
+ADD zap2xml.pl /
 
 # Copy built binary from builder image
-COPY --from=builder /src/xteve $XTEVE_BIN/xteve
+COPY --from=builder /src/xteve /xteve/bin/xteve
 
 # Set binary permissions
-RUN chmod +rx $XTEVE_BIN/xteve
+RUN chmod +rx /xteve/bin/xteve
 
 # Create XML cache directory
-RUN mkdir $XTEVE_HOME/cache
+RUN mkdir /xteve/cache
 
 # Create working directories for xTeVe
 RUN mkdir -p /config
 RUN chmod a+rwX /config
 RUN mkdir $XTEVE_TEMP
 RUN chmod a+rwX $XTEVE_TEMP
-RUN mkdir /data
-Run mkdir $ZAP2XML_HOME/cache
+Run mkdir /zap2xml/cache
 
 
 # add local files
 COPY root/ /
 
 # ports and volumes
-VOLUME /config /data $XTEVE_TEMP $ZAP2XML_HOME
+VOLUME /config $XTEVE_TEMP /zap2xml
 EXPOSE 34400
